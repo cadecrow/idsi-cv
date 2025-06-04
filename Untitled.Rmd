@@ -1,0 +1,31 @@
+---
+title: "processing_files"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+
+data <- 
+  read_csv("../full_data_train_post.csv") %>% 
+  mutate(
+    subtype = 
+      recode(
+        subtype, 
+        "destroyed" = 1, 
+        "major-damage" = 1, 
+        "minor-damage" = 0, 
+        "no-damage" = 0
+      )
+  ) %>% 
+  group_by(subtype) %>% 
+  top_n(27388) 
+
+data %>% 
+  write_csv("sampled_data.csv")
+```
+
